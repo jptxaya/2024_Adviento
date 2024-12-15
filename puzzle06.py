@@ -51,8 +51,24 @@ def verify_obstacle_posibilities( p_array, n_direction):
             p_array = np.sum([ p_array, m_mov], axis=0)
         return None
 
+#Not affordable
+def verify_obstacle_posibilities_2(p_array, c_movement, n_direction):
+    guard_position_0 = p_array[0]
+    guard_position_1 = p_array[1]
+    obstacle_position = np.sum([ p_array, calc_movement], axis=0)
+    p_array = np.sum([ p_array, c_movement], axis=0)
+    while( inside_limits(p_array,guard_map)):
+        if (guard_map[p_array[0]][p_array[1]] == 1) or (obstacle_position[0] == p_array[0] and obstacle_position[1] == p_array[1] ):
+            p_array = np.sum([ p_array, -1 * c_movement], axis=0)
+            #guard_map[position_array[0]][position_array[1]] = number_direction
+            n_direction = change_direction(n_direction)
+            c_movement = get_direction(n_direction)
+        elif guard_position_0 == p_array[0] and guard_position_1 == p_array[1]:
+            return (obstacle_position[0],obstacle_position[1])
+        p_array = np.sum([ p_array, c_movement], axis=0)
+    return False
 
-with open("data/data06_test.txt","r") as file:
+with open("data/data06.txt","r") as file:
     file_map = file.read().splitlines()
 
 position = []
@@ -85,6 +101,7 @@ while( inside_limits(position_array,guard_map)):
         verify_obstacle = verify_obstacle_posibilities(position_array,number_direction)
         if verify_obstacle:
             obstacles_posibilities.add(verify_obstacle)
+            print(len(obstacles_posibilities))
         guard_map[position_array[0]][position_array[1]] = number_direction
         position_array = np.sum([ position_array, calc_movement], axis=0)
         movements += 1
@@ -92,8 +109,8 @@ while( inside_limits(position_array,guard_map)):
         verify_obstacle = verify_obstacle_posibilities(position_array,number_direction)
         if verify_obstacle:
             obstacles_posibilities.add(verify_obstacle)
+            print(len(obstacles_posibilities))
         position_array = np.sum([ position_array, calc_movement], axis=0)
 print(movements)
 print(len(obstacles_posibilities))
-print(obstacles_posibilities)
 
