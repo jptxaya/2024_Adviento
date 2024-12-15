@@ -11,17 +11,27 @@ def set_aninodes(antenna,pos_y, pos_x,set_antenna):
                dif_x = x - pos_x
                dif_y = y - pos_y
                if dif_x >= 0:
-                   antinode1 = [pos_y - dif_y,pos_x - dif_x]
-                   antinode2 = [y + dif_y, x + dif_x]
+                   #Contruct all antindodes lu
+                   rep = 1
+                   while( (pos_y - (dif_y * rep) >= 0) and (pos_x - (dif_x * rep) >= 0) ):
+                       set_antenna.add((pos_y - (dif_y * rep) , pos_x - (dif_x * rep)))
+                       rep += 1
+                   #Contruct all antindodes rd
+                   rep = 1
+                   while( (y + (dif_y * rep) < len(mapa)) and (x + (dif_x * rep) < len(mapa[0])) ):
+                       set_antenna.add((y + (dif_y * rep) , x + (dif_x * rep)))
+                       rep += 1
                else:
-                   antinode1 = [pos_y - dif_y,pos_x + abs(dif_x)]
-                   antinode2 = [y + dif_y, x + dif_x]
-               if (antinode1[0] >= 0)  and (antinode1[0] < len(mapa)) and (antinode1[1] >= 0) and antinode1[1] < len(mapa[0]): #and mapa[antinode1[0]][antinode1[1]] == ".":
-                   count_antenna += 1
-                   set_antenna.add((antinode1[0],antinode1[1]))
-               if (antinode2[0] >= 0)  and (antinode2[0] < len(mapa)) and (antinode2[1] >= 0) and antinode2[1] < len(mapa[0]): #and mapa[antinode2[0]][antinode2[1]] == ".":
-                   count_antenna += 1
-                   set_antenna.add((antinode2[0],antinode2[1]))
+                   #Contruct all antindodes ru
+                   rep = 1
+                   while( (pos_y - (dif_y * rep) >= 0) and (pos_x + abs(dif_x * rep) < len(mapa[0])) ):
+                       set_antenna.add((pos_y - (dif_y * rep) , pos_x + abs(dif_x * rep)))
+                       rep += 1
+                   #Contruct all antindodes ld
+                   rep = 1
+                   while( (y + (dif_y * rep) < len(mapa)) and (x + (dif_x * rep) >= 0) ):
+                       set_antenna.add((y + (dif_y * rep) , x + (dif_x * rep)))
+                       rep += 1
             x += 1
         y += 1
     return count_antenna
@@ -39,6 +49,9 @@ while(i < len(mapa)):
     while( j < len(mapa[0])):
         if mapa[i][j] != ".":
             find_character = mapa[i][j]
+            #Part 2
+            set_antenna.add((i,j))
+            #End Part 2 
             set_aninodes(find_character,i,j,set_antenna)
         j  += 1
     i += 1
