@@ -7,6 +7,27 @@ directions={
     3:[-1,0]
 }
 
+def all_cheat_20(point):
+    points = set()
+    for x in range(5,0,-1):
+        points.add((point[0] + x,point[1], x))
+        for y in range(5-x,0,-1):
+            new_point_1 = (point[0] + x,point[1] - y, x + y)
+            new_point_2 = (point[0] + x,point[1] + y, x + y)
+            points.add(new_point_1)
+            points.add(new_point_2)
+    for x in range(-6,0):
+        points.add((point[0] + x,point[1], x))
+        for y in range(6-abs(x),0,-1):
+            new_point_1 = (point[0] + x,point[1] - y, x + y)
+            new_point_2 = (point[0] + x,point[1] + y, x + y)
+            points.add(new_point_1)
+            points.add(new_point_2)
+    print(len(points))
+    return points
+    
+
+
 def bfs(tree, start, end):
     visited = []
     queue = deque([(start,0)])
