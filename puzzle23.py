@@ -1,4 +1,5 @@
-with open("data/data23.txt") as file:
+from collections import deque
+with open("data/data23_test.txt") as file:
     computers = set()
     connections = dict()
     for elem in file.read().splitlines():
@@ -11,22 +12,23 @@ with open("data/data23.txt") as file:
          connections[connection[1]].add(connection[0])
 #print(connections)
 
-filter_t_computers = list(filter(lambda x: x.startswith("t") > 0, computers))
-print(filter_t_computers)
-game_sets = set()
+filter_t_computers = sorted(list(filter(lambda x: x.startswith("t"), computers)))
+max_length = 0
+result = set()
+results = set()
+
 for cmp in filter_t_computers:
-    i = 0
-    clist = list(connections[cmp])
-    while( i < len(clist) - 1):
-        c2 = clist[i]
-        for c3 in clist[i+1:]:
-            if c3 in connections[c2]:
-              game_set = [cmp,c2,c3]
-              game_set = sorted(game_set)
-              game_sets.add(tuple(game_set))
-        i += 1
+    pps = set([cmp])
+    for elem in connections.get(cmp, []):
+         if all(elem in connections.get(base, []) for base in pps):
+            pps.add(elem)
+    if len(pps) >= max_length:
+        max_length = len(pps)
+        aux = sorted(list(pps))
+        result.add(tuple(aux))
+for elem in result:
+    results.add(",".join(elem))
 
-for gs in game_sets:
-    print(gs)
-print(len(game_sets))
-
+max_length = max(len(s) for s in results)
+results = list(filter(lambda x: len(x) == max_length,results))
+print(sorted(results))
