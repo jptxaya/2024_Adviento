@@ -1,3 +1,5 @@
+import copy
+
 def evaluate_1(lista_numeros)-> bool:
     direction = False
     if lista_numeros[0] < lista_numeros[1]:
@@ -26,83 +28,14 @@ def evaluate_direction(lista_numeros)-> bool:
     return True
 
 def evaluate_2(lista_numeros)-> bool:
-    direction = False
-    credits = True
-    #direction = evaluate_direction(lista_numeros)
-    if lista_numeros[0] < lista_numeros[1]:
-        direction = True
-    i=0
-    j=1
-    text = ""
-    while(j <= len(lista_numeros)-1 ):
-        difference = abs(lista_numeros[i] - lista_numeros[j])
-        if (lista_numeros[i] == lista_numeros[j]):
-            if credits:
-                text = text + "Equal"
-                credits = False
-                i = j
-                j += 1
-            else:
-                #print(f"EQ{lista_numeros} {text}")
-                return False
-        elif difference not in [1,2,3]:
-            print(f"{lista_numeros} {i} {j}")
-            #We have to choice what is the best option
-            if i == 0:
-                if abs(lista_numeros[i] - lista_numeros[j+1]) in [1,2,3] or abs(lista_numeros[i+1] - lista_numeros[j+1]) in [1,2,3]:
-                    if credits:
-                        credits = False
-                        i = j+1
-                        j = j+2
-                    else:
-                        return False
-                else:
-                    return False
-            elif j <= len(lista_numeros) - 2:
-                if abs(lista_numeros[i] - lista_numeros[j+1]) in [1,2,3]:
-                    if credits:
-                        credits = False
-                        i = j+1
-                        j = j+2
-                    else:
-                        return False
-                else:
-                    return False
-            elif j == len(lista_numeros) - 1:
-                if credits:
-                    return True
-                else:
-                    #print(f"hello {lista_numeros}")
-                    return False
-        else:
-            if direction:
-                if (lista_numeros[i] > lista_numeros[j]):
-                    if not credits:
-                        #print(f"EWD{lista_numeros} {text}")
-                        return False
-                    else:
-                        text = text + "WD"
-                        credits = False
-                        j +=1
-                else:
-                    i = j
-                    j += 1
-            else:
-                if (lista_numeros[i] < lista_numeros[j]):
-                    if not credits:
-                        #print(f"EWD{lista_numeros} {text}")
-                        return False
-                    else:
-                        text = text + "WD"
-                        credits = False
-                        j +=1
-                else:
-                    i = j
-                    j += 1
-                        
-
-    print(f"C {lista_numeros}")
-    return True
+    i = 0
+    while i < len(lista_numeros):
+        aux_lista = copy.deepcopy(lista_numeros)
+        aux_lista.pop(i)
+        if evaluate_1(aux_lista):
+            return True
+        i += 1
+    return False
 
 safe_reports_1 = 0
 safe_reports_2 = 0
